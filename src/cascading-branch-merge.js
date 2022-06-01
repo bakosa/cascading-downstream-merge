@@ -47,21 +47,10 @@ async function cascadingBranchMerge(
   console.log('repository.repo: ', repository.repo)
       
   const tempRequestObject = { owner: repository.owner, repo: repository.repo, per_page: 100 } // not sure if '1000' works, or maybe it stops at '100' by default
-  try{
-  const branches = (await context.github.repos.listBranches(tempRequestObject)).data
-//   const branches = await octokit.rest.repos.listBranches({
-//     owner: repository.owner,
-//     repo: repository.repo,
-//     per_page: 100
-//   }).data;
-  }
-  catch(e)
-  {
-    console.log('Error getting branches for Repo')
-    console.log(e)
-  }
-      
-  console.log('branches: ', branches)
+
+  const branches = (await octokit.rest.repos.listBranches(tempRequestObject)).data
+  console.log(`branches response: ${JSON.stringify(branches)}`)
+
       
   let mergeListHead = []
   let mergeListBase = []
@@ -284,9 +273,9 @@ async function cascadingBranchMerge(
  * @param branches
  */
 function getBranchMergeOrder(prefix, headBranch, branches) {
-  console.log('prefix: ', prefix)
-  console.log('headBranch: ', headBranch)
-  console.log('branches: ', branches)
+  console.log('getBranchMergeOrder - prefix: ', prefix)
+  console.log('getBranchMergeOrder - headBranch: ', headBranch)
+  console.log('getBranchMergeOrder - branches: ', branches)
   
   let branchList = []
   // create a list from the 'branches' array, containing only branch names
@@ -296,12 +285,13 @@ function getBranchMergeOrder(prefix, headBranch, branches) {
 
   // filter the branch names that start with the required prefix
   branchList = branchList.filter(b => b.startsWith(prefix))
-
   const len = branchList.length
 
+  console.log('getBranchMergeOrder - branchList: ', branchList)
   // Bubble Sort - I know... but it's fine for our purpose
   for (let j = 0; j < len - 1; j++) {
     for (let i = 0; i < len - 1; i++) {
+      console.log(`getBranchMergeOrder - branch: ${i}:${branchList[i]}`)
       const res = isBiggerThan(semanticVersionToArray(branchList[i]), semanticVersionToArray(branchList[i + 1]))
 
       if (res) {
@@ -371,6 +361,9 @@ function semanticVersionToArray(vStr) {
   const av = []
   // 1.1.rc.1
   // "release/1.1-rc.1"  -->  ['1','1-rc','1']
+  console.log(`semanticVersionToArray - vStr: ${vStr}`)
+  console.log(`semanticVersionToArray - typeOf vStr: ${typeof(vStr)}`)
+
   const avTemp = vStr.split('/')[1].split('.')
 
   avTemp.forEach(function (v, index) {

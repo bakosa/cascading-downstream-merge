@@ -39,6 +39,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           prefixes: ${{ github.event.inputs.prefixes }}
           refBranch: ${{ github.event.inputs.refBranch }}
-          pullNumber: ${{ github.event.inputs.pullNumber }}
 #           prefixes: '["feature","release"]'
 #           refBranch: development
