@@ -34,7 +34,7 @@ const github = require('@actions/github');
         console.log('headBranch: ' + headBranch)
         console.log('baseBranch: ' + baseBranch)
 
-        console.log(context)
+        // console.log(context)
 
         const repository = {
             "owner": owner,
