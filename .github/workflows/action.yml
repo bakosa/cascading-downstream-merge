@@ -37,5 +37,5 @@ jobs:
       - uses: ./
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          prefixes: release,feature,hotfix
+          prefixes: release/,feature/,hotfix/
           refBranch: main
