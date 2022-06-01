@@ -21,6 +21,7 @@ const github = require('@actions/github');
         const headBranch = context.payload.pull_request.head.ref
         const baseBranch = context.payload.pull_request.base.ref
         console.log('phase 1')
+        console.log(`prefixes type: ${typeof(prefixes)}`)
         
         console.log('GITHUB_TOKEN: ' + token)
         console.log('owner: ' + owner)
@@ -39,7 +40,7 @@ const github = require('@actions/github');
         }
 
         cascadingBranchMerge(
-            [prefixes],        // array of prefixes
+            prefixes,        // array of prefixes
             refBranch,
             headBranch,
             baseBranch,
