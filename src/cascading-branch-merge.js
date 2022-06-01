@@ -67,10 +67,12 @@ async function cascadingBranchMerge(
   // branches   = all branches of the Repository
   prefixes.forEach(function (prefix) {
     if (headBranch.startsWith(prefix)) {
+      console.log(`cascadingBranchMerge - headbranch: ${headbranch}, prefix ${prefix}`)
       mergeListHead = getBranchMergeOrder(prefix, headBranch, branches)
     }
 
     if (baseBranch.startsWith(prefix)) {
+      console.log(`cascadingBranchMerge - baseBranch: ${baseBranch}, prefix ${prefix}`)
       mergeListBase = getBranchMergeOrder(prefix, baseBranch, branches)
     }
   })
