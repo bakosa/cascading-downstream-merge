@@ -17,36 +17,32 @@ const github = require('@actions/github');
         const context = github.context
         const owner = github.context.repo.owner
         const repo = github.context.repo.repo
-//         const pullNumber = context.payload.pull_request.number
-//         const headBranch = context.payload.pull_request.head.ref
-//         const baseBranch = context.payload.pull_request.base.ref
+        const pullNumber = context.payload.pull_request.number
+        const headBranch = context.payload.pull_request.head.ref
+        const baseBranch = context.payload.pull_request.base.ref
         console.log('phase 1')
-        const pullNumber = core.getInput("pullNumber")
-        const headBranch = 'jefeish-patch-3'
-        const baseBranch = 'release/1.1'
+
+        let prefixArray = prefixes.split(",")
         
         console.log('GITHUB_TOKEN: ' + token)
         console.log('owner: ' + owner)
         console.log('repo: ' + repo)
         console.log('prefixes: ' + prefixes)
+        console.log('prefixArray: ' + prefixArray)
         console.log('refBranch: ' + refBranch)
         console.log('pullNumber: ' + pullNumber)
         console.log('headBranch: ' + headBranch)
         console.log('baseBranch: ' + baseBranch)
 
         console.log(context)
-        const res = await getPullRequest(pullNumber, owner, repo, octokit)
-        console.log('res: ')
-        console.log(res)
-        console.log('mergeable: '+ res.data.mergeable)
-        console.log('mergeable_state: '+ res.data.mergeable_state)
+
         const repository = {
             "owner": owner,
             "repo": repo
         }
 
         cascadingBranchMerge(
-            [prefixes],        // array of prefixes
+            prefixArray,        // array of prefixes
             refBranch,
             headBranch,
             baseBranch,
