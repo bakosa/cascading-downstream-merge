@@ -65,9 +65,10 @@ async function cascadingBranchMerge(
   // prefix     = the name of prefix name of the branch we care about
   // headBranch = the "source" branch, the one we made changes to
   // branches   = all branches of the Repository
+  console.log('cascadingBranchMerge - prefixes', prefixes)
   prefixes.forEach(function (prefix) {
     if (headBranch.startsWith(prefix)) {
-      console.log(`cascadingBranchMerge - headbranch: ${headbranch}, prefix ${prefix}`)
+      console.log(`cascadingBranchMerge - headbranch: ${headBranch}, prefix ${prefix}`)
       mergeListHead = getBranchMergeOrder(prefix, headBranch, branches)
     }
 
