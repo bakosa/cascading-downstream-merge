@@ -21,7 +21,7 @@ const github = require('@actions/github');
 //         const headBranch = context.payload.pull_request.head.ref
 //         const baseBranch = context.payload.pull_request.base.ref
         console.log('phase 1')
-        const pullNumber = core.getInput("pullNumber")
+        // const pullNumber = core.getInput("pullNumber")
         const headBranch = 'jefeish-patch-3'
         const baseBranch = 'release/1.1'
         
@@ -35,11 +35,11 @@ const github = require('@actions/github');
         console.log('baseBranch: ' + baseBranch)
 
         console.log(context)
-        const res = await getPullRequest(pullNumber, owner, repo, octokit)
-        console.log('res: ')
-        console.log(res)
-        console.log('mergeable: '+ res.data.mergeable)
-        console.log('mergeable_state: '+ res.data.mergeable_state)
+        // const res = await getPullRequest(pullNumber, owner, repo, octokit)
+        // console.log('res: ')
+        // console.log(res)
+        // console.log('mergeable: '+ res.data.mergeable)
+        // console.log('mergeable_state: '+ res.data.mergeable_state)
         const repository = {
             "owner": owner,
             "repo": repo
