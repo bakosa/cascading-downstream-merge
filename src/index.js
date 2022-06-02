@@ -34,22 +34,26 @@ const github = require('@actions/github');
         console.log('headBranch: ' + headBranch)
         console.log('baseBranch: ' + baseBranch)
 
-        // console.log(context)
+        console.log(context)
 
         const repository = {
             "owner": owner,
             "repo": repo
         }
-
-        cascadingBranchMerge(
-            prefixArray,        // array of prefixes
-            refBranch,
-            headBranch,
-            baseBranch,
-            repository,
-            octokit,
-            pullNumber
-        )
+        if(context.payload.pull_request.merged) {
+            cascadingBranchMerge(
+                prefixArray,        // array of prefixes
+                refBranch,
+                headBranch,
+                baseBranch,
+                repository,
+                octokit,
+                pullNumber
+            )
+        }
+        else {
+            console.log("PR was not merged. Not cascading.")
+        }
         
     } catch (e) {
         console.log(e)
