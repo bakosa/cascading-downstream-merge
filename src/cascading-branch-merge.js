@@ -46,9 +46,15 @@ async function cascadingBranchMerge(
   console.log('repository.owner: ', repository.owner)
   console.log('repository.repo: ', repository.repo)
       
-  const tempRequestObject = { owner: repository.owner, repo: repository.repo, per_page: 100 } // not sure if '1000' works, or maybe it stops at '100' by default
 
-  const branches = (await octokit.rest.repos.listBranches(tempRequestObject)).data
+  const branches = (await octokit.rest.repos.listBranches(
+    { 
+      owner: repository.owner, 
+      repo: repository.repo, 
+      per_page: 100 
+    }
+  )).data
+
   console.log(`branches response: ${JSON.stringify(branches)}`)
 
       
@@ -65,18 +71,13 @@ async function cascadingBranchMerge(
   // prefix     = the name of prefix name of the branch we care about
   // headBranch = the "source" branch, the one we made changes to
   // branches   = all branches of the Repository
-  console.log('cascadingBranchMerge - prefixes', prefixes)
-  console.log('cascadingBranchMerge - headBranch', headBranch)
-  console.log('cascadingBranchMerge - baseBranch', baseBranch)
   
   prefixes.forEach(function (prefix) {
     if (headBranch.startsWith(prefix)) {
-      console.log(`cascadingBranchMerge - headbranch: ${headBranch}, prefix ${prefix}`)
       mergeListHead = getBranchMergeOrder(prefix, headBranch, branches)
     }
 
     if (baseBranch.startsWith(prefix)) {
-      console.log(`cascadingBranchMerge - baseBranch: ${baseBranch}, prefix ${prefix}`)
       mergeListBase = getBranchMergeOrder(prefix, baseBranch, branches)
     }
   })
@@ -104,7 +105,7 @@ async function cascadingBranchMerge(
           base: mergeList[i + 1],
           head: mergeList[i],
           title: 'Cascading Auto-Merge: merge [' + mergeList[i] + '] into [' + mergeList[i + 1] + ']',
-          body: 'This PR was created automatically by the probot auto-merge app.'
+          body: 'This PR was created automatically by the cascading downstream merge action.'
         })
       }
       catch (error)   // could not create the PR
@@ -279,9 +280,6 @@ async function cascadingBranchMerge(
  * @param branches
  */
 function getBranchMergeOrder(prefix, headBranch, branches) {
-  console.log('getBranchMergeOrder - prefix: ', prefix)
-  console.log('getBranchMergeOrder - headBranch: ', headBranch)
-  console.log('getBranchMergeOrder - branches: ', branches)
   
   let branchList = []
   // create a list from the 'branches' array, containing only branch names
@@ -297,7 +295,6 @@ function getBranchMergeOrder(prefix, headBranch, branches) {
   // Bubble Sort - I know... but it's fine for our purpose
   for (let j = 0; j < len - 1; j++) {
     for (let i = 0; i < len - 1; i++) {
-      console.log(`getBranchMergeOrder - branch: ${i}:${branchList[i]}`)
       const res = isBiggerThan(semanticVersionToArray(branchList[i]), semanticVersionToArray(branchList[i + 1]))
 
       if (res) {
@@ -367,8 +364,6 @@ function semanticVersionToArray(vStr) {
   const av = []
   // 1.1.rc.1
   // "release/1.1-rc.1"  -->  ['1','1-rc','1']
-  console.log(`semanticVersionToArray - vStr: ${vStr}`)
-  console.log(`semanticVersionToArray - typeOf vStr: ${typeof(vStr)}`)
 
   const avTemp = vStr.split('/')[1].split('.')
 
